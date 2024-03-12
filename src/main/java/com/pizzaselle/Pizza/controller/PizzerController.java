@@ -32,14 +32,14 @@ public List<Pizza> showAllPizza(){
 }
 
 @PostMapping(path = "/pizza/create")
-public ResponseEntity<String> createPizza(@RequestBody Pizza pizza) {
-	 int totalPrice = pizza.getQuantity() * pizza.getPrice();
-	 pizza.setTotal(totalPrice);
-	 pizzaInterface.save(pizza);
-	
-    return ResponseEntity.ok("Pizza created successfully");
-    
-    
+public ResponseEntity<String> createPizza(@RequestBody List<Pizza> pizzas) {
+    for (Pizza pizza : pizzas) {
+        int totalPrice = pizza.getQuantity() * pizza.getPrice();
+        pizza.setTotal(totalPrice);
+        pizzaInterface.save(pizza);
+    }
+
+    return ResponseEntity.ok("Pizzas created successfully");
 }
 
 
