@@ -33,13 +33,15 @@ public List<Pizza> showAllPizza(){
 
 @PostMapping(path = "/pizza/create")
 public ResponseEntity<String> createPizza(@RequestBody List<Pizza> pizzas) {
+    int totalAmount = 0;
     for (Pizza pizza : pizzas) {
         int totalPrice = pizza.getQuantity() * pizza.getPrice();
         pizza.setTotal(totalPrice);
         pizzaInterface.save(pizza);
+        totalAmount += totalPrice; 
     }
 
-    return ResponseEntity.ok("Pizzas created successfully");
+    return ResponseEntity.ok("Pizzas created successfully. Total amount: " + totalAmount);
 }
 
 
