@@ -20,28 +20,31 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 @Service
 public class PizzaService {
-	@Autowired
-	private PizzaInterface pizzaInterface;
-	
-	public String exportReport(String reportFormat) throws FileNotFoundException, JRException {
-	 String path= "C:\\Users\\developer\\Desktop\\report";
-		List< Pizza > tasks = pizzaInterface .findAll();
-		File file= ResourceUtils.getFile("classpath:PizzaTest1.jrxml");
-		JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-		
-		JRBeanCollectionDataSource datasource = new JRBeanCollectionDataSource( tasks);
-		Map<String,Object> map = new HashMap<>();
-		map.put("createdBy", "ian");
-		JasperPrint jasperPrint = JasperFillManager.fillReport( jasperReport,map, datasource );
-		if(reportFormat.equalsIgnoreCase("html")){
-			JasperExportManager.exportReportToHtmlFile(jasperPrint,path+"\\tasks.html");
-		}
-         if(reportFormat.equalsIgnoreCase("pdf")){
-        	 JasperExportManager.exportReportToPdfFile(jasperPrint,path+"\\tasks.pdf");
-		}
-		return "Report Generated in path :"+path;
-	}
+    @Autowired
+    private PizzaInterface pizzaInterface;
+
+    public String exportReport(String reportFormat) throws FileNotFoundException, JRException {
+        String path = "C:\\Users\\developer\\Desktop\\report";
+        List<Pizza> pizzas = pizzaInterface.findAll();
+        File file = ResourceUtils.getFile("classpath:PizzaTest1.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(pizzas);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("createdBy", "ian");
+
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+        if (reportFormat.equalsIgnoreCase("html")) {
+            JasperExportManager.exportReportToHtmlFile(jasperPrint, path + "\\Receipt.html");
+        }
+        if (reportFormat.equalsIgnoreCase("pdf")) {
+            JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\Receipt.pdf");
+        }
+        return "Report Generated in path: " + path;
+    }
 }
+
